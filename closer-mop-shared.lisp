@@ -689,3 +689,14 @@
                 else nconc (list key value) into fixed-initargs
                 finally (return (nconc fixed-initargs fixed-keys)))))
       initargs)))
+
+(defun copy-instance (old)
+  "Returns a shallow copy of the CLOS instance OLD.
+  All slots need to have an :INITARG."
+  (unless (typep old 'standard-class)
+    (error "Only copies STANDARD-CLASSes, not ~s" old))
+  ;; We can't use SETF on a new instance because the initforms might be incompatible types.
+  (apply #'make-instance (class-of old)
+         (loop for slot in (class-slots (class-of old))
+               collect (first (slot-definition-initargs slot))
+               collect (slot-value-using-class (class-of old) old slot))))

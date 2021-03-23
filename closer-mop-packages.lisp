@@ -245,6 +245,8 @@
    #:validate-superclass
    #:writer-method-class
 
+   #:copy-instance
+
    #:warn-on-defmethod-without-generic-function))
 
 (in-package :closer-mop)
